@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Barangay Cloud Architecture Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .diagram-container {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .layer {
+            margin-bottom: 2rem;
+        }
+
+        .layer-title {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .layer-title h2 {
+            font-size: 1.25rem;
+            color: #374151;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .layer-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .client-cards {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            width: 250px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            color: white;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .card-purple {
+            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .card-badge {
+            margin-top: 0.75rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .note-box {
+            margin-top: 1rem;
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+        }
+
+        .note-box p {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .arrow-line {
+            width: 2px;
+            height: 3rem;
+            background: linear-gradient(to bottom, #9ca3af, #4b5563);
+        }
+
+        .arrow-head {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #4b5563;
+        }
+
+        .arrow-label {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .security-layer {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .security-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .security-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .security-title h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .security-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .security-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.25rem;
+            padding: 0.75rem;
+        }
+
+        .security-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .security-item-text {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .app-layer {
+            background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .app-header h3 {
+            font-size: 1.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.25rem;
+            padding: 1rem;
+        }
+
+        .app-item h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-item p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .app-features {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 0.25rem;
+            padding: 1rem;
+        }
+
+        .app-features h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .note-box-green {
+            margin-top: 0.75rem;
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+        }
+
+        .note-box-green p {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .database-layer {
+            background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .db-stored-data {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .db-stored-data h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stored-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .db-capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .db-capability {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 0.25rem;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .db-capability-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .db-capability-text {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .summary {
+            margin-top: 2rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        .summary h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-item {
+            border-left: 4px solid;
+            padding-left: 1rem;
+        }
+
+        .summary-item.blue {
+            border-color: #3b82f6;
+        }
+
+        .summary-item.purple {
+            border-color: #a855f7;
+        }
+
+        .summary-item.green {
+            border-color: #10b981;
+        }
+
+        .summary-item.orange {
+            border-color: #f97316;
+        }
+
+        .summary-item h4 {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-item p {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .diagram-container {
+                padding: 1rem;
+            }
+
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>E-Barangay Information System</h1>
+            <p>Cloud Architecture (PaaS - Public Cloud)</p>
+            <div class="badge">Microsoft Azure Platform</div>
+        </div>
+
+        <!-- Main Diagram -->
+        <div class="diagram-container">
+            
+            <!-- Client Layer -->
+            <div class="layer">
+                <div class="layer-title">
+                    <h2>👥 Client Layer</h2>
+                    <div class="layer-subtitle">User Interface & Access Points</div>
+                </div>
+                
+                <div class="client-cards">
+                    <div class="card card-blue">
+                        <div class="card-icon">💻</div>
+                        <h3>Web Browser</h3>
+                        <p>Barangay officials & citizens access via desktop/laptop browsers</p>
+                        <div class="card-badge">📡 Service Workers</div>
+                    </div>
+
+                    <div class="card card-purple">
+                        <div class="card-icon">📱</div>
+                        <h3>Mobile App</h3>
+                        <p>Progressive Web App (PWA) for mobile devices</p>
+                        <div class="card-badge">📴 Offline Capable</div>
+                    </div>
+                </div>
+
+                <div class="note-box">
+                    <p><strong>Offline Capability:</strong> Service workers cache key resources for continued operation during network disruptions</p>
+                </div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+                <div class="arrow-label">HTTPS/REST API</div>
+            </div>
+
+            <!-- Security Layer -->
+            <div class="layer">
+                <div class="security-layer">
+                    <div class="security-header">
+                        <div class="security-icon">🛡️</div>
+                        <div class="security-title">
+                            <h2>Security & Authentication Layer</h2>
+                            <div class="security-subtitle">Azure Identity & Security Services</div>
+                        </div>
+                    </div>
+                    
+                    <div class="security-grid">
+                        <div class="security-item">
+                            <div class="security-item-header">
+                                🔒 Authentication
+                            </div>
+                            <div class="security-item-text">Azure Active Directory for user login</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-header">
+                                👤 Authorization
+                            </div>
+                            <div class="security-item-text">Role-based access control (RBAC)</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-header">
+                                🔐 Encryption
+                            </div>
+                            <div class="security-item-text">Data encryption at rest & in transit</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-header">
+                                📋 Compliance
+                            </div>
+                            <div class="security-item-text">Government security standards</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+                <div class="arrow-label">Secure Access</div>
+            </div>
+
+            <!-- Application/API Layer -->
+            <div class="layer">
+                <div class="layer-title">
+                    <h2>⚙️ Application / API Layer</h2>
+                    <div class="layer-subtitle">Business Logic & RESTful APIs</div>
+                </div>
+                
+                <div class="app-layer">
+                    <div class="app-header">
+                        <h3>☁️ Azure PaaS Services</h3>
+                    </div>
+                    
+                    <div class="app-grid">
+                        <div class="app-item">
+                            <h4>Azure App Service</h4>
+                            <p>Hosts web applications and APIs</p>
+                        </div>
+                        <div class="app-item">
+                            <h4>Azure Functions</h4>
+                            <p>Serverless compute for event-driven tasks</p>
+                        </div>
+                    </div>
+
+                    <div class="app-features">
+                        <h4>Core Features</h4>
+                        <div class="features-grid">
+                            <div>✓ Form Submissions</div>
+                            <div>✓ Report Generation</div>
+                            <div>✓ Client-DB Communication</div>
+                            <div>✓ Auto-scaling</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note-box-green">
+                    <p><strong>PaaS Benefits:</strong> No server/middleware management required. Azure handles scaling, maintenance, and runtime environment.</p>
+                </div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+                <div class="arrow-label">Data Operations</div>
+            </div>
+
+            <!-- Database/Storage Layer -->
+            <div class="layer">
+                <div class="layer-title">
+                    <h2>💾 Cloud Database / Storage Layer</h2>
+                    <div class="layer-subtitle">Data Persistence & Management</div>
+                </div>
+                
+                <div class="database-layer">
+                    <div class="app-header">
+                        <h3>🗄️ Azure Database Services</h3>
+                    </div>
+                    
+                    <div class="app-grid">
+                        <div class="app-item">
+                            <h4>Azure SQL Database</h4>
+                            <p>Relational database for structured data</p>
+                        </div>
+                        <div class="app-item">
+                            <h4>Azure Cosmos DB</h4>
+                            <p>NoSQL database for flexible schemas</p>
+                        </div>
+                    </div>
+
+                    <div class="db-stored-data">
+                        <h4>Stored Data</h4>
+                        <div class="stored-grid">
+                            <div>• Resident Records</div>
+                            <div>• Certificates</div>
+                            <div>• Transactions</div>
+                            <div>• User Accounts</div>
+                            <div>• Documents</div>
+                            <div>• Audit Logs</div>
+                        </div>
+                    </div>
+
+                    <div class="db-capabilities">
+                        <div class="db-capability">
+                            <div class="db-capability-title">Auto-scaling</div>
+                            <div class="db-capability-text">Handles ~100,000 users</div>
+                        </div>
+                        <div class="db-capability">
+                            <div class="db-capability-title">High Availability</div>
+                            <div class="db-capability-text">Built-in redundancy</div>
+                        </div>
+                        <div class="db-capability">
+                            <div class="db-capability-title">Automated Backups</div>
+                            <div class="db-capability-text">Point-in-time recovery</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Summary -->
+        <div class="summary">
+            <h3>Architecture Summary</h3>
+            <div class="summary-grid">
+                <div class="summary-item blue">
+                    <h4>Service Model</h4>
+                    <p><strong>Platform-as-a-Service (PaaS)</strong> - Provides ready-to-use development and hosting environment with managed servers, storage, middleware, and databases.</p>
+                </div>
+                <div class="summary-item purple">
+                    <h4>Deployment Model</h4>
+                    <p><strong>Public Cloud</strong> - Microsoft-managed infrastructure with pay-as-you-go pricing, global datacenter presence, and no local hardware required.</p>
+                </div>
+                <div class="summary-item green">
+                    <h4>Key Benefits</h4>
+                    <p>Auto-scaling, cost-effectiveness, offline capability, no infrastructure management, enterprise-grade security, and high availability.</p>
+                </div>
+                <div class="summary-item orange">
+                    <h4>Target Capacity</h4>
+                    <p>Designed to handle approximately <strong>100,000 users</strong> with automatic scaling and built-in redundancy for government service requirements.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
